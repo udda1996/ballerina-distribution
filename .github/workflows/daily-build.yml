@@ -239,7 +239,7 @@ jobs:
         run: sudo installer -pkg installers/mac/target/pkg/ballerina-macos-installer-x64-*.pkg -target /
       - name: Run Installer Tests
         working-directory: ./ballerina-test-automation/installer-test
-        run: .././gradlew build --stacktrace -scan --console=plain --no-daemon -DballerinaInstalled=true -x test
+        run: .././gradlew build --stacktrace -scan --console=plain --no-daemon -DballerinaInstalled=true
 
   windows-installer-build:
 
