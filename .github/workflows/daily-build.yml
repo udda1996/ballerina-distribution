@@ -35,7 +35,7 @@ jobs:
           packageUser: ${{ github.actor }}
           packagePAT: ${{ secrets.GITHUB_TOKEN }}
           devCentralToken: ${{ secrets.BALLERINA_DEV_CENTRAL_ACCESS_TOKEN }}
-        run: ./gradlew clean build --stacktrace --scan --console=plain --no-daemon --continue
+        run: ./gradlew clean build --stacktrace --scan --console=plain --no-daemon --continue -x test -x :ballerina:testExamples
       - name: Create linux-deb
         id: run_installers_deb
         run: |
@@ -176,7 +176,7 @@ jobs:
           push: false
           tags: ballerina/ballerina-devcontainer:nightly-test
           build-args: |
-            BALLERINA_DIST=ballerina-${{ steps.version.outputs.version }}-linux-x64.deb
+            BALLERINA_DIST=ballerina-${{ steps.project-version.outputs.version }}-linux-x64.deb
       - name: Run Trivy vulnerability scanner for dev container docker image
         uses: aquasecurity/trivy-action@master
         with:
@@ -191,7 +191,7 @@ jobs:
           push: true
           tags: ballerina/ballerina-devcontainer:nightly
           build-args: |
-            BALLERINA_DIST=ballerina-${{ steps.version.outputs.version }}-linux-x64.deb
+            BALLERINA_DIST=ballerina-${{ steps.project-version.outputs.version }}-linux-x64.deb
     outputs:
       project-version: ${{ steps.project-version.outputs.version }}
 
@@ -238,7 +238,7 @@ jobs:
         working-directory: ./ballerina-test-automation/installer-test
         run: |
           bal -v
-          ./../gradlew build --stacktrace -scan --console=plain --no-daemon -DballerinaInstalled=true
+          ./../gradlew build --stacktrace -scan --console=plain --no-daemon -DballerinaInstalled=true -x test
 
   macos-installer-build:
 
@@ -275,7 +275,7 @@ jobs:
         run: sudo installer -pkg installers/mac/target/pkg/ballerina-*-macos-x64.pkg -target /
       - name: Run Installer Tests
         working-directory: ./ballerina-test-automation/installer-test
-        run: ./../gradlew build --stacktrace -scan --console=plain --no-daemon -DballerinaInstalled=true
+        run: ./../gradlew build --stacktrace -scan --console=plain --no-daemon -DballerinaInstalled=true -x test
 
   windows-installer-build:
 
@@ -323,7 +323,7 @@ jobs:
         working-directory: .\ballerina-test-automation\installer-test
         run: |
           $env:Path += ";C:\Program Files\Ballerina\bin"
-          .\..\gradlew build --stacktrace -scan --console=plain --no-daemon -DballerinaInstalled=true
+          .\..\gradlew build --stacktrace -scan --console=plain --no-daemon -DballerinaInstalled=true -x test
 
   trigger-notifications:
 
